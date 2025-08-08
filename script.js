@@ -1,18 +1,39 @@
-// Local Shayari Data
-const shayariData = [
-  { language: "Hindi", category: "Suvichar", content: "सफलता का कोई शॉर्टकट नहीं होता।" },
-  { language: "Hindi", category: "Love", content: "तेरा नाम लूं जुबां से, यही बात अब आदत बन गई है।" },
-  { language: "Marathi", category: "Suvichar", content: "प्रयत्न ही यशाची गुरुकिल्ली आहे." },
-  { language: "Marathi", category: "Love", content: "प्रेम म्हणजे दोन जीवांचं एक नातं." },
-  { language: "English", category: "Motivational", content: "Push yourself, because no one else is going to do it for you." },
-  { language: "English", category: "Love", content: "Love is not what you say. Love is what you do." }
-];
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfZeAzEcLaZjrJvJ0mBtdPTQ8U_lzAaWEIo3BbEMPCqUWHf5dQf5ftW4xZG2iBAgz1azS9rhdSRd_m/pubhtml";
 
-// Load Shayari by language & category
-function loadShayari(language, category, containerId) {
+// Fetch and parse CSV data from Google Sheets
+async function fetchShayariData() {
+  try {
+    const response = await fetch(SHEET_CSV_URL);
+    const csvText = await response.text();
+    return parseCSV(csvText);
+  } catch (error) {
+    console.error("Error loading Shayari data:", error);
+    return [];
+  }
+}
+
+// Simple CSV parser
+function parseCSV(csvText) {
+  const lines = csvText.trim().split("\n");
+  const headers = lines[0].split(",");
+  const data = lines.slice(1).map(line => {
+    const values = line.split(",");
+    const entry = {};
+    headers.forEach((header, i) => {
+      entry[header.trim()] = values[i].trim();
+    });
+    return entry;
+  });
+  return data;
+}
+
+// Use data to display Shayari by language and category
+async function loadShayariFromSheet(language, category, containerId) {
   const container = document.getElementById(containerId);
-  const filtered = shayariData.filter(
-    item => item.language === language && item.category === category
+  const allData = await fetchShayariData();
+
+  const filtered = allData.filter(
+    item => item.Language === language && item.Category === category
   );
 
   if (filtered.length === 0) {
@@ -23,7 +44,7 @@ function loadShayari(language, category, containerId) {
   container.innerHTML = "";
   filtered.forEach(item => {
     const p = document.createElement("p");
-    p.textContent = item.content;
+    p.textContent = item.Content;
     container.appendChild(p);
   });
 }
