@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Daily Shayari</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+  <header>
+    <h1>📜 Daily Shayari</h1>
+    <p>Select your language</p>
+  </header>
+  <main class="language-selector">
+    <a href="languages/hindi.html" class="lang-btn">हिंदी</a>
+    <a href="languages/marathi.html" class="lang-btn">मराठी</a>
+    <a href="languages/english.html" class="lang-btn">English</a>
+  </main>
+</body>
+</html>
