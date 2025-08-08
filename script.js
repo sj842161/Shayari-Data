@@ -1,6 +1,5 @@
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfZeAzEcLaZjrJvJ0mBtdPTQ8U_lzAaWEIo3BbEMPCqUWHf5dQf5ftW4xZG2iBAgz1azS9rhdSRd_m/pubhtml";
 
-// Fetch and parse CSV data from Google Sheets
 async function fetchShayariData() {
   try {
     const response = await fetch(SHEET_CSV_URL);
@@ -12,22 +11,17 @@ async function fetchShayariData() {
   }
 }
 
-// Simple CSV parser
 function parseCSV(csvText) {
   const lines = csvText.trim().split("\n");
   const headers = lines[0].split(",");
-  const data = lines.slice(1).map(line => {
+  return lines.slice(1).map(line => {
     const values = line.split(",");
-    const entry = {};
-    headers.forEach((header, i) => {
-      entry[header.trim()] = values[i].trim();
-    });
-    return entry;
+    const obj = {};
+    headers.forEach((h, i) => (obj[h.trim()] = values[i].trim()));
+    return obj;
   });
-  return data;
 }
 
-// Use data to display Shayari by language and category
 async function loadShayariFromSheet(language, category, containerId) {
   const container = document.getElementById(containerId);
   const allData = await fetchShayariData();
